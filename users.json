@@ -2,6 +2,7 @@
     {
         "name": "Colin Gale",
         "username": "coco",
-        "password": "password"
+        "password": "1234",
+        "mapbox": "mapbox token"
     }
 ]
