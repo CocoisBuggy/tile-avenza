@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { MapRef } from "react-map-gl";
-import Footer from "../components/Footer";
 import MapController, { MapState } from "../components/MapController";
 import MapExporter from "../components/MapExporter";
+import { getTileUrls, getUrl } from "../utils/mapMath";
+import { Tile } from "../utils/xyz";
 
 export default function Home() {
   const [mapRef, setMapRef] = useState<MapRef | null>(null);
@@ -12,6 +13,7 @@ export default function Home() {
     longitude: 0,
     zoom: 0,
   });
+  const [tilesInArea, setTilesInArea] = useState<Tile[] | null>(null);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -41,8 +43,28 @@ export default function Home() {
           <div className="w-full flex-1">
             <MapController
               viewState={mapState}
-              onChange={setMapState}
-              onMoveEnd={() => {}}
+              onMove={(s) => {
+                if (tilesInArea !== null) {
+                  console.log(getUrl(tilesInArea[0]));
+                }
+
+                setMapState(s);
+                setTilesInArea(null);
+              }}
+              onMoveEnd={() => {
+                if (mapRef !== null) {
+                  const bounds = mapRef.getBounds();
+                  const sw = bounds.getSouthWest();
+                  const ne = bounds.getNorthEast();
+
+                  setTilesInArea(
+                    getTileUrls([
+                      [sw.lng, sw.lat],
+                      [ne.lng, ne.lat],
+                    ])
+                  );
+                }
+              }}
               onMapLoad={setMapRef}
             />
           </div>
@@ -50,7 +72,11 @@ export default function Home() {
           {mapRef && (
             <div className="absolute p-8">
               <div className="bg-black text-light p-4 rounded-lg border border-white">
-                <MapExporter viewState={mapState} map={mapRef} />
+                <MapExporter
+                  tiles={tilesInArea?.length || null}
+                  viewState={mapState}
+                  map={mapRef}
+                />
               </div>
             </div>
           )}

@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 type Props = {
   viewState: MapState;
-  onChange: (mapState: MapState) => void;
+  onMove: (mapState: MapState) => void;
   onMoveEnd: (mapState: MapState) => void;
   onMapLoad: (map: MapRef) => void;
 };
@@ -20,7 +20,7 @@ export interface MapState {
 
 export default function MapController({
   viewState,
-  onChange,
+  onMove,
   onMoveEnd,
   onMapLoad,
 }: Props) {
@@ -40,11 +40,12 @@ export default function MapController({
         onMoveEnd(e.viewState);
       }}
       onMove={(e) => {
-        onChange(e.viewState);
+        onMove(e.viewState);
       }}
       onLoad={_onMapLoad}
       mapStyle="mapbox://styles/mapbox/satellite-v9"
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+      minZoom={4}
     />
   );
 }

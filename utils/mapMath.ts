@@ -1,12 +1,5 @@
-import { LngLatBoundsLike } from "react-map-gl";
 import * as turf from "@turf/turf";
-import { MapState } from "../components/MapController";
-
-export interface Tile {
-  zoom: number;
-  x: number;
-  y: number;
-}
+import { Tile, xyz } from "./xyz";
 
 export type Bounds = [[number, number], [number, number]];
 
@@ -22,53 +15,12 @@ export function areaInBounds(bounds: Bounds): number {
   return turf.area(turf.bboxPolygon(bbox));
 }
 
-/**
- * It converts a latitude and longitude into a tile coordinate
- * @param {number} lat - latitude of the point
- * @param {number} lng - longitude
- * @returns xtile and ytile
- */
-export function getTile(lat: number, lng: number): Tile {
-  let zoom = 17;
-  let lat_rad = turf.degreesToRadians(lat);
-
-  // pls no bit shift. I do not care, and this expresses the will clearly.
-  let n = 2 ** zoom;
-
-  let x = Math.round(n * ((lng + 180) / 360) * 100) / 100;
-  let y =
-    Math.round(
-      ((n *
-        (1 - Math.log((Math.tan(lat_rad) + 1 / Math.cos(lat_rad)) / Math.PI))) /
-        2) *
-        100
-    ) / 100;
-
-  return { zoom, x, y };
+export function getTileUrls(bounds: Bounds) {
+  let zoom = 15;
+  return xyz(bounds, zoom);
 }
 
-function tileLon(tile: Tile) {
-  return (tile.x / 2 ** tile.zoom) * 360 - 180;
-}
-
-function tileLat(tile: Tile) {
-  let n = Math.PI - (2 * Math.PI * tile.y) / 2 ** tile.zoom;
-  return turf.radiansToDegrees(Math.atan(Math.sinh(n)));
-}
-
-/**
- * It takes a tile and returns the bounds of that tile
- * @param {Tile} tile - The tile to get the bounds for.
- */
-export function getTileBounds(tile: Tile): Bounds {
-  let w = tileLon(tile);
-  let s = tileLat(tile);
-
-  let e = tileLon({ ...tile, x: tile.x + 1 });
-  let n = tileLat({ ...tile, y: tile.y + 1 });
-
-  return [
-    [w, s],
-    [e, n],
-  ];
+export function getUrl(tile: Tile) {
+  const url = "https://api.mapbox.com/v4/mapbox.satellite";
+  return `${url}/${tile.z}/${tile.x}/${tile.y}@2x.jpg90?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}"`;
 }
