@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { MapRef } from "react-map-gl";
 import { areaInBounds, getTileUrls } from "../utils/mapMath";
 import { MapState } from "./MapController";
+import prettyBytes from "pretty-bytes";
 
 type Props = {
   viewState: MapState;
@@ -52,7 +53,7 @@ export default function MapExporter({ viewState, map, tiles }: Props) {
         ) : (
           <div>
             <div>Tiles in area: {tiles}</div>
-            <div>Approx size of image: {tiles * 52} bytes</div>
+            <div>{prettyBytes(tiles * (125 * 1000))}</div>
           </div>
         )}
       </div>
