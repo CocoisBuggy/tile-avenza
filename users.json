@@ -3,6 +3,6 @@
         "name": "Colin Gale",
         "username": "coco",
         "password": "1234",
-        "mapbox": "mapbox token"
+        "mapboxToken": "mapbox token"
     }
 ]

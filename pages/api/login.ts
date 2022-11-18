@@ -8,13 +8,19 @@ type LoginResult = {
   mapboxToken: string;
 };
 
+/**
+ * A User is an object with a name, username, password, and mapboxToken property, where the name and
+ * username are strings, the password is a string (unhashed), and the mapboxToken is a string or null.
+ */
 export type User = {
   name: string;
   username: string;
   password: string;
+  /** This is the token that will be used to access the Mapbox */
   mapboxToken: string | null;
 };
 
+/** fite me 😡 */
 export type UserPublic = {
   name: string;
   username: string;

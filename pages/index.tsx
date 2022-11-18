@@ -27,6 +27,25 @@ export default function Home() {
     }
   }, []);
 
+  // This effect prevents state hanging on loading.
+  useEffect(handleSetTile, [mapRef]);
+
+  /** compute and change state of the number of tiles for the given viewstate */
+  function handleSetTile() {
+    if (mapRef !== null) {
+      const bounds = mapRef.getBounds();
+      const sw = bounds.getSouthWest();
+      const ne = bounds.getNorthEast();
+
+      setTilesInArea(
+        getTileUrls([
+          [sw.lng, sw.lat],
+          [ne.lng, ne.lat],
+        ])
+      );
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -51,20 +70,7 @@ export default function Home() {
                 setMapState(s);
                 setTilesInArea(null);
               }}
-              onMoveEnd={() => {
-                if (mapRef !== null) {
-                  const bounds = mapRef.getBounds();
-                  const sw = bounds.getSouthWest();
-                  const ne = bounds.getNorthEast();
-
-                  setTilesInArea(
-                    getTileUrls([
-                      [sw.lng, sw.lat],
-                      [ne.lng, ne.lat],
-                    ])
-                  );
-                }
-              }}
+              onMoveEnd={handleSetTile}
               onMapLoad={setMapRef}
             />
           </div>
