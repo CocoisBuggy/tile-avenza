@@ -2,27 +2,48 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Bounds } from "../../utils/mapMath";
 import { UserPublic } from "./login";
-
-type Data = {
-  url: string;
-  /** Size of the created image in bytes */
-  imgSize: number;
-};
+import fs from "fs";
 
 export type StitchedImage = {
   url: string;
-  imgSize: number;
+  /** Number of bytes in the image */
+  bytes: number;
   bounds: Bounds;
-  createdBy: UserPublic;
   creadedAt: Date;
 };
 
 export function getStitchedImages(): StitchedImage[] {
-  return [];
+  ensureDataDirectory();
+  const imgs: StitchedImage[] = [];
+
+  // We need to read each file, and extract some metadata about it
+  return fs.readdirSync("./public/render").map((file) => {
+    return {
+      url: `/render/${file}`,
+      bytes: 0,
+      bounds: [
+        [0, 0],
+        [0, 0],
+      ],
+      creadedAt: new Date(),
+    };
+  });
+}
+
+/**
+ * If the data directory doesn't exist, create it
+ */
+function ensureDataDirectory() {
+  var dir = "./data";
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
 }
 
 /** get a list of previously rendered satellite images */
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<StitchedImage[]>
-) {}
+) {
+  res.status(200).json(getStitchedImages());
+}

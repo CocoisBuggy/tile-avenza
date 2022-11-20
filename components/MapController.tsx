@@ -1,12 +1,14 @@
 import React, { useRef } from "react";
-import Map, { MapRef, ViewState } from "react-map-gl";
+import Map, { MapRef } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { MapSettings } from "./MapExporterSettings";
 
 type Props = {
   viewState: MapState;
   onMove: (mapState: MapState) => void;
   onMoveEnd: (mapState: MapState) => void;
   onMapLoad: (map: MapRef) => void;
+  mapSettings: MapSettings;
 };
 
 export type BBoxType = [[number, number], [number, number]];
@@ -23,6 +25,7 @@ export default function MapController({
   onMove,
   onMoveEnd,
   onMapLoad,
+  mapSettings,
 }: Props) {
   const mapRef = useRef<MapRef>(null);
 
@@ -43,9 +46,10 @@ export default function MapController({
         onMove(e.viewState);
       }}
       onLoad={_onMapLoad}
-      mapStyle="mapbox://styles/mapbox/satellite-v9"
+      mapStyle={mapSettings.mapStyle.url}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-      minZoom={4}
+      minZoom={mapSettings.minZoom}
+      maxZoom={mapSettings.maxZoom}
     />
   );
 }

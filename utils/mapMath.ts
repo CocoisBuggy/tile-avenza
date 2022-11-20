@@ -22,5 +22,10 @@ export function getTileUrls(bounds: Bounds) {
 
 export function getUrl(tile: Tile) {
   const url = "https://api.mapbox.com/v4/mapbox.satellite";
-  return `${url}/${tile.z}/${tile.x}/${tile.y}@2x.jpg90?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}"`;
+  return `${url}/${tile.z}/${tile.x}/${tile.y}@2x.jpg90?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
+}
+
+export function centroidOfBounds(bounds: Bounds) {
+  const line = turf.lineString(bounds);
+  return turf.centroid(line);
 }
