@@ -4,6 +4,7 @@ import { MapRef } from "react-map-gl";
 import MapController, { MapState } from "../components/MapController";
 import MapExporter from "../components/MapExporter";
 import { defaultMapSettings } from "../components/MapExporterSettings";
+import NavBar from "../components/NavBar";
 import { getTileUrls, getUrl } from "../utils/mapMath";
 import { Tile } from "../utils/xyz";
 
@@ -80,14 +81,20 @@ export default function Home() {
 
           {mapRef && (
             <div className="absolute p-8">
-              <div className="bg-black text-light p-4 rounded-lg border border-white">
-                <MapExporter
-                  mapSettings={mapSettings}
-                  onSettingsChange={setMapSettings}
-                  tiles={tilesInArea?.length || null}
-                  viewState={mapState}
-                  map={mapRef}
-                />
+              <div className="bg-black text-light rounded-lg border border-white">
+                <div className="w-full">
+                  <NavBar />
+                </div>
+
+                <div className="p-4">
+                  <MapExporter
+                    mapSettings={mapSettings}
+                    onSettingsChange={setMapSettings}
+                    tiles={tilesInArea?.length || null}
+                    viewState={mapState}
+                    map={mapRef}
+                  />
+                </div>
               </div>
             </div>
           )}
