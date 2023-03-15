@@ -1,10 +1,11 @@
 import React from "react";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { styled, keyframes } from "@stitches/react";
-import { CaretDownIcon } from "@radix-ui/react-icons";
+import { CaretDownIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { blackA } from "@radix-ui/colors";
 import { GitHub, History } from "@mui/icons-material";
 import HistorySummary from "./HistorySummary";
+import Link from "next/link";
 
 const NavBar = () => {
   return (
@@ -18,6 +19,15 @@ const NavBar = () => {
 
           <NavigationMenuContent>
             <div className="w-64 p-2">
+              <Link href="/renders">
+                <button
+                  className="text-center bg-black rounded text-white p-1 w-full flex items-center
+                gap-3 justify-center"
+                >
+                  View All
+                </button>
+              </Link>
+              <div className="mt-4"></div>
               <HistorySummary />
             </div>
           </NavigationMenuContent>

@@ -107,7 +107,7 @@ export default function MapExporter({
           <ZoomIn className="mr-2" />
           {viewState.zoom.toFixed(2)}
         </span>
-        <span>
+        <span className="w-32">
           <MapOutlined className="mr-2" />
           {(area / 1000000).toFixed(1)}
           <sup>2</sup> km

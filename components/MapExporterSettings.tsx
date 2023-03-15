@@ -139,7 +139,7 @@ type Props = {
 export const defaultMapSettings: MapSettings = {
   mapStyle: { url: "mapbox://styles/mapbox/satellite-v9" },
   maxZoom: 15,
-  minZoom: 4,
+  minZoom: 7,
   showExports: true,
 };
 

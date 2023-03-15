@@ -124,6 +124,8 @@ export default async function handler(
   console.log("Creating new job", jobId);
   res.status(200).json({}); // we return no error.
 
+  // The response has been dispatched, now we actually begin the heavy work
+
   // Create the new job.
   Jobs[jobId] = {
     progress: 0,

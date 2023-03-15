@@ -67,10 +67,6 @@ export default function Home() {
               mapSettings={mapSettings}
               viewState={mapState}
               onMove={(s) => {
-                if (tilesInArea !== null) {
-                  console.log(getUrl(tilesInArea[0]));
-                }
-
                 setMapState(s);
                 setTilesInArea(null);
               }}
